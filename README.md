@@ -1,272 +1,196 @@
-# **README**
+# Clarté Ornée
 
+Site e-commerce de luminaires développé en PHP natif, avec une base de données MySQL/MariaDB locale.
+Il présente un catalogue de lampes classées par catégorie, et chaque lampe a sa fiche détaillée. Le site gère aussi les comptes clients, un panier, une page de paiement (simulée) et un formulaire de service après-vente (SAV).
 
+---
 
+## Sommaire
 
+- [Fonctionnalités](#fonctionnalités)
+- [Technologies](#technologies)
+- [Prérequis](#prérequis)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Architecture du projet](#architecture-du-projet)
+- [Routage](#routage)
+- [Base de données](#base-de-données)
+- [Sécurité](#sécurité)
+- [Auteurs](#auteurs)
 
+---
 
+## Fonctionnalités
 
-#### **Clarté Ornée**
+| Fonctionnalité | Page | Connexion requise |
+|---|---|---|
+| Catalogue des lampes, regroupées par type (plafond, murale, sol, chevet, extérieur) | `home` | Non |
+| Fiche produit : prix, puissance, couleur, style, matériau, dimensions, description | `lamp-details` | Non |
+| Ajout d'une lampe au panier | `lamp-details` | Oui |
+| Panier : liste des articles, suppression, total | `basket` | Oui |
+| Paiement simulé : adresse de livraison et carte bancaire, puis vidage du panier | `achat` | Oui |
+| Création de compte | `inscription` | Non |
+| Connexion / déconnexion | `login` / `logout` | Non |
+| Demande au service client (SAV), avec numéro de commande facultatif | `customers-services` | Oui |
+| Pages d'information : FAQ, contact, à propos, mentions légales | `FAQ`, `contact`, `about`, `legal_disclaimer` | Non |
 
+> Le paiement est **fictif** : aucune donnée bancaire n'est enregistrée ni transmise. Valider le formulaire vide simplement le panier du client.
 
+---
 
-Site web dynamique en PHP connecté à une base MySQL locale, permettant la gestion du panier, des clients, du SAV ainsi que des lampes misent en vente (description, prix etc...).
+## Technologies
 
+- **Back-end :** PHP 8 (sans framework), PDO
+- **Base de données :** MySQL / MariaDB
+- **Front-end :** HTML5 et CSS3 (une feuille de style par page)
+- **Serveur local :** WampServer (Apache + MySQL + PHP)
 
+---
 
-#### **Prérequis**
+## Prérequis
 
+- Windows 10 ou supérieur, avec les droits administrateur
+- [WampServer](https://www.wampserver.com/) en 64 bits (recommandé), avec les *Microsoft Visual C++ Redistributables*
+- PHP **8.0 ou plus**, avec l'extension `pdo_mysql` activée (elle l'est par défaut sous WAMP)
+- MySQL ou MariaDB
+- Git
+- Un navigateur web
 
+---
 
-###### **Logiciel nécessaire :**
+## Installation
 
+### 1. Démarrer WampServer
 
+1. Lancer WampServer.
+2. Attendre que l'icône de la barre des tâches passe au **vert**.
+3. Vérifier que http://localhost s'affiche.
 
-* PHP > 8.0
-* MySQL ou MariaDB
-* Serveur local : WAMP
-* Navigateur web
+### 2. Cloner le projet
 
+Ouvrir un terminal dans `C:\wamp64\www`, puis :
 
+```bash
+git clone https://github.com/YannPPV/Projet-transversale-web.git
+```
 
+### 3. Créer la base de données
 
+1. Ouvrir phpMyAdmin : http://localhost/phpmyadmin
+2. Se connecter avec l'utilisateur `root`, sans mot de passe, sur le serveur **MySQL**.
+3. Ouvrir l'onglet **SQL** et exécuter, **dans cet ordre** :
+   1. le contenu de [base_de_donnees/lampes.sql](base_de_donnees/lampes.sql), qui crée la base `clarte_Ornee` et ses tables ;
+   2. le contenu de [base_de_donnees/bddtest.sql](base_de_donnees/bddtest.sql), qui ajoute le catalogue de 50 lampes (10 par catégorie).
 
-###### **Extension PHP :**
+> ⚠️ `lampes.sql` commence par `DROP DATABASE IF EXISTS clarte_Ornee;`. Le relancer **efface toutes les données existantes**, y compris les comptes clients, les paniers et les demandes SAV.
 
+### 4. Lancer le site
 
+Ouvrir dans le navigateur :
 
-* pdo\_mysql activée
+```
+http://localhost/Projet-transversale-web/index.php
+```
 
+---
 
+## Configuration
 
+Les paramètres de connexion à la base se trouvent dans [dbConnect.php](dbConnect.php) :
 
-
-#### **Installation et lancement**
-
-
-
-##### **Installation de WAMP**
-
-
-
-###### **Prérequis**
-
-* Windows 10 ou supérieur
-* Droits administrateur
-* Microsoft Visual C++ Redistribuable (souvent requis)
-
-
-
-###### **Téléchargement**
-
-1. Se rendre sur le site officiel de WampServer
-2. Télécharger la version correspondant à votre système (64 bits recommandé)
-
-
-
-###### **Démarrage du server**
-
-1. Lancer WampServer
-2. Vérifier que l'icône est verte dans la barre des tâches
-3. Ouvrir un navigateur et accéder à : http://localhost
-
-
-
-
-
-##### **Installation de phpMyAdmin**
-
-
-
-phpMyAdmin est utilisé pour gérer la base de données du projet.
-
-
-
-###### **Installation**
-
-1. Lancer WampServer
-2. Vérifier que l'icône WAMP est verte
-
-
-
-##### **Lancement**
-
-1. Accéder à phpMyAdmin via : http://localhost/phpmyadmin
-
-
-
-
-
-##### **Installation du site web**
-
-
-
-###### **Installation**
-
-1. Dans votre ordinateur aller dans C:\\wamp64\\www
-2. Ouvrez le terminal en faisant un clique droit
-3. Puis rentrer la commandes suivante :
-
-
-
-* git clone https://github.com/Yann336/Projet-transversale-web.git
-
-
-
-###### **Lancement du site web**
-
-1. Retourner dans votre navigateur internet
-2. Coller cette ligne :
-
-
-
- http://localhost/Projet-transversale-web/index.php
-
-
-
-
-
-#### **Architecture du projet**
-
-
-/PROJET-TRANSVERSALE-WEB
-<br>|──assets/
-<br>|	└── css/
-<br>|	└── images/
-<br>|──base_de_donnees/
-<br>| 	└──lampes.sql
-<br>|──models/
-<br>|	└──Lamps/
-<br>|──views/
-<br>|	└──pages/
-<br>|	└──partials/
-<br>|──index.php
-<br>|──README.text
-
-
-* assets/ : contenue permettant l'esthétique du site web
-* models/ : connexion et récupération des données de la database en local
-* base\_de\_données/ : script de création des actions utilisateur
-* views/ : affichage HTML
-
-##### 
-
-#### **base de données**
-
-
-
-###### **Résumé des tables :**
-
-* **Lamps**(idLamps, TypeLamp, Power, Color, Price, Style, Material, Dimensions, Description, Stock, PathPicture)
-* **Basket**(idBasket, NbSelected, LampSelected)
-* **Customers**(idCustomer, Name, Lastname, Email, Street, City, Country, PostCode, NumberPhone, Password)
-* **CustomerService**(idCustomerService, Request, OrderNumber
-
-
-
-
-
-###### **Importation :**
-
-
-
-1. Lancer WAMP directement depuis votre ordinateur
-2. Ouvrir phpMyAdmin via internet via /localhost
-3. Dans utilisateur sélectionnez 'root'
-4. Dans Choix du serveur sélectionnez 'MySQL' puis connexion
-5. Aller dans → Nouvelle base de données/SQL
-6. Coller le fichier dans base\_de\_donnees/lampes.sql puis exécuter
-
-
-
-
-
-#### **Configuration**
-
-
-
-Dans le fichier : Lamps/dbConnect.php
-
-
-
-###### **Paramètre :**
-
-'db\_sgbd' => 'mysql',
-
-'db\_host' => 'localhost',
-
-'db\_name' => 'Clarte\_Ornee',
-
-'db\_username' => 'root',
-
-'db\_password' => ''
-
-
-
-###### **Description des paramètres :**
-
-'db\_sgbd' : Système de gestion de base de données utilisé (MySQL)
-
-'db\_host' : Adresse du serveur de base de données (localhost en environnement local)
-
-'db\_name' : Nom de la base de données
-
-'db\_username' : Nom d'utilisateur MySQL
-
-'db\_password' : Mot de passe MySQL (vide par défaut sous WAMP)
-
-
-
-###### **Environnement requis :**
-
-* PHP 8.0 minimum
-* MySQL ou MariaDB
-* Serveur local (WAMP)
-
-
-
-###### **Remarques importantes :**
-
-* Vérifier que la base de données 'Clarte\_Ornee' est bien de créée avant de lancer le projet
-* Importer le fichier SQL fourni dans le dossier base\_de\_donnees/lampes.sql
-* Ces informations sont valables uniquement pour un environnement local
-
-
-
-
-
-#### **Fonctionnalités**
-
-
-
-* Création de compte utilisateur
-* Connexion / Déconnexion
-* Ajout / modification / suppression de données
-* Sécurisation basique (PDOO, requêtes préparées)
-
-
-
-
-
-#### **Sécurité**
-
-
-
-* Requêtes préparées avec PDO
-* Hash des mots de passe
-* Validation des formulaires
-
-
-
-
-
-#### **Auteur**
-
-
-
-**Projet réalise par :**
-
-* Edely Lola
-* Popov Yann
-* Lefranc Nathan
-* Bourt Théo
+```php
+$dbConfig = [
+    'db_sgbd'     => 'mysql',        // SGBD utilisé
+    'db_host'     => 'localhost',    // Adresse du serveur de base de données
+    'db_name'     => 'Clarte_Ornee', // Nom de la base
+    'db_username' => 'root',         // Utilisateur MySQL
+    'db_password' => '',             // Mot de passe (vide par défaut sous WAMP)
+];
+```
+
+La connexion PDO est configurée en UTF-8, avec le mode d'erreur `ERRMODE_EXCEPTION` et la récupération par défaut `FETCH_ASSOC`.
+
+> Ces identifiants ne conviennent qu'à un environnement local. Il faut les changer avant tout déploiement.
+
+---
+
+## Architecture du projet
+
+```
+Projet-transversale-web/
+├── index.php                  # Point d'entrée unique (routeur)
+├── dbConnect.php              # Connexion PDO à la base
+├── assets/
+│   ├── css/                   # Une feuille de style par page + navbar/footer
+│   └── images/                # Photos des lampes, logos, icônes de paiement
+├── base_de_donnees/
+│   ├── lampes.sql             # Création de la base et des tables
+│   └── bddtest.sql            # Jeu de données : catalogue de lampes
+├── models/                    # Accès aux données et traitements
+│   ├── lampes.php             # Chargement des lampes et des catégories
+│   ├── select-details.php     # Chargement d'une lampe par son id
+│   ├── basket.php             # Lecture du panier et suppression d'un article
+│   └── add.php                # Inscription d'un client
+└── views/
+    ├── partials/
+    │   ├── _navbar.php        # En-tête et menu (affiche Connexion ou Déconnexion)
+    │   └── _footer.php        # Pied de page et liens d'information
+    └── pages/                 # Une vue par page (home, login, basket, achat…)
+```
+
+---
+
+## Routage
+
+Toutes les pages passent par [index.php](index.php), qui lit le paramètre `page` dans l'URL :
+
+```
+index.php?page=<nom>
+```
+
+- Sans paramètre, la page `home` est affichée.
+- `index.php` charge `assets/css/<nom>.css`, puis inclut la navbar, `views/pages/<nom>.php` et le footer.
+- La fiche produit reçoit aussi l'identifiant de la lampe : `index.php?page=lamp-details&id=12`.
+
+L'utilisateur connecté est suivi dans la session PHP : `$_SESSION['authenticated']` et `$_SESSION['pseudo']`, qui contient l'adresse e-mail du client.
+
+---
+
+## Base de données
+
+Base : `clarte_Ornee` (encodage `utf8mb4`, moteur InnoDB).
+
+| Table | Colonnes | Rôle |
+|---|---|---|
+| **Lamps** | `idLamp`, `name`, `TypeLamp`, `Power`, `Color`, `Price`, `Style`, `Material`, `Dimensions`, `Description`, `Quantity`, `PathPicture` | Catalogue des luminaires |
+| **Customers** | `idCustomer`, `Name`, `Lastname`, `Email`, `Street`, `City`, `Country`, `PostCode`, `NumberPhone`, `password` | Comptes clients (mot de passe haché) |
+| **Baskets** | `idBasket`, `idLamp` → Lamps, `idCustomer` → Customers | Articles du panier (une ligne par article ajouté) |
+| **CustomerService** | `idCustomerService`, `idCustomer` → Customers, `Request`, `OrderNumber` | Demandes adressées au SAV |
+
+```
+Customers 1 ──── n Baskets n ──── 1 Lamps
+Customers 1 ──── n CustomerService
+```
+
+---
+
+## Sécurité
+
+- Les requêtes SQL sont préparées avec PDO (paramètres nommés).
+- Les mots de passe sont hachés avec `password_hash()` et vérifiés avec `password_verify()`.
+- Les données affichées sont échappées avec `htmlspecialchars()`.
+- Les identifiants reçus (`id`, `idLamp`) sont validés avec `filter_input(..., FILTER_VALIDATE_INT)`.
+- Les formulaires sont validés côté client (`required`, `pattern`, `maxlength`).
+- L'e-mail est vérifié à l'inscription : impossible de créer deux comptes avec la même adresse.
+- Le panier, le paiement et le SAV exigent d'être connecté. Sinon, l'utilisateur est redirigé vers `login`.
+
+---
+
+## Auteurs
+
+Projet transversal réalisé par :
+
+- Edely Lola
+- Popov Yann
+- Lefranc Nathan
+- Bourt Théo
