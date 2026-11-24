@@ -71,7 +71,7 @@ Il présente un catalogue de lampes classées par catégorie, et chaque lampe a 
 Ouvrir un terminal dans `C:\wamp64\www`, puis :
 
 ```bash
-git clone https://github.com/YannPPV/Projet-transversale-web.git
+git clone https://github.com/YannPPV/Clarte-Ornee.git
 ```
 
 ### 3. Créer la base de données
@@ -89,7 +89,7 @@ git clone https://github.com/YannPPV/Projet-transversale-web.git
 Ouvrir dans le navigateur :
 
 ```
-http://localhost/Projet-transversale-web/index.php
+http://localhost/Clarte-Ornee/index.php
 ```
 
 ---
@@ -117,7 +117,7 @@ La connexion PDO est configurée en UTF-8, avec le mode d'erreur `ERRMODE_EXCEPT
 ## Architecture du projet
 
 ```
-Projet-transversale-web/
+Clarte-Ornee/
 ├── index.php                  # Point d'entrée unique (routeur)
 ├── dbConnect.php              # Connexion PDO à la base
 ├── assets/
